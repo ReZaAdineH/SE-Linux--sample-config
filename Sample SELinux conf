@@ -1,0 +1,56 @@
+# This is an enriched SELinux policy file configuration that covers some of the tactics in the MITRE ATT&CK matrix.
+
+# Define the policy version
+policy_version(1.0)
+
+# Define the initial SELinux security context for files
+# in the root file system
+root_filesystem_context(system_u:object_r:rootfs:s0)
+
+# Allow Apache to listen on port 80
+allow_httpd_tcp_bind(httpd_tcp_port_t)
+
+# Allow Apache to read and write to the document root
+allow_httpd_sys_rw_content_t(httpd_t, httpd_sys_content_t)
+
+# Allow Apache to execute scripts in the document root
+allow_httpd_sys_script_exec(httpd_t, httpd_sys_content_t)
+
+# Allow Apache to connect to a database
+allow_httpd_db_connect(httpd_t, mysqld_port_t)
+
+# Allow Apache to execute CGI scripts
+allow_httpd_cgi_exec(httpd_t, httpd_sys_script_exec_t)
+
+# Allow Apache to read and write to log files
+allow_httpd_log_t(httpd_t, syslogd_log_t)
+
+# Allow Apache to access PHP session files
+allow_httpd_session_access(httpd_t, httpd_sys_rw_content_t)
+
+# Allow Apache to access the system's temporary directory
+allow_httpd_tmp_t(httpd_t, tmp_t)
+
+# Allow Apache to access the system's network sockets
+allow_httpd_network_socket(httpd_t, network_socket_t)
+
+# Allow Apache to access the system's DNS resolver
+allow_httpd_dns_resolver(httpd_t, dns_resolver_t)
+
+# Allow Apache to access the system's time services
+allow_httpd_time_services(httpd_t, time_services_t)
+
+# Allow Apache to read and execute files in the /usr/bin directory
+allow_httpd_usr_bin_exec(httpd_t, usr_bin_t)
+
+# Allow Apache to execute a shell
+allow_httpd_shell_exec(httpd_t, shell_exec_t)
+
+# Deny Apache from accessing sensitive files
+dontaudit_httpd_sensitive_files(httpd_t, sensitive_files_t)
+
+# Deny Apache from executing malicious scripts
+dontaudit_httpd_malicious_scripts(httpd_t, malicious_scripts_t)
+
+# Deny Apache from accessing malicious domains
+dontaudit_httpd_malicious_domains(httpd_t, malicious_domains_t)
